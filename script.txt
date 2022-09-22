@@ -1,0 +1,14 @@
+/c
+recipes = {}
+i = 1
+game.print("print test")
+for  _, v in pairs(game.player.force.recipes) do
+	local r = {}
+	r["name"] = v.name
+	r["ingredients"] = v.ingredients
+	r["products"] = v.products
+	r["energy"] = v.energy
+	recipes[i] = r
+	i = i + 1
+end
+game.write_file("test", serpent.block(recipes))
