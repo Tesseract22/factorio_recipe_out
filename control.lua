@@ -89,8 +89,8 @@ local function Dump(event)
         end
         
     end
-    game.write_file("data-dump/belts.json", json.encode(belts))
-    game.write_file("data-dump/machines.json", json.encode(machines))
+    game.write_file("data-dump/belts.json", game.table_to_json(belts))
+    game.write_file("data-dump/machines.json", game.table_to_json(machines))
     game.print("machines.json written")
     game.print("belts.json written")
     return recipes, machines, belts
@@ -108,7 +108,7 @@ local function MatchMachineGroup(machines)
         end
     end
     
-    game.write_file("data-dump/machine-group.json", json.encode(res))
+    game.write_file("data-dump/machine-group.json", game.table_to_json(res))
     return res
 end
 
