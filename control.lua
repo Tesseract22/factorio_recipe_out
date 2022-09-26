@@ -1,4 +1,3 @@
-json = require "json"
 
 
 local function Dump(event)
@@ -20,25 +19,30 @@ local function Dump(event)
     end
 
     local raw = {}
-    for k, v in pairs(game.item_prototypes) do --raw dummpy solid resources
-        if (v.subgroup.name == "raw-resource") then
-            -- raw[v.name] = v.minable["mining_time"]
+    local item_group = {}
+    -- for k, v in pairs(game.item_prototypes) do --raw dummpy solid resources
+    --     item_group[k] = "solid"
+    --     if (v.subgroup.name == "raw-resource") then
+    --         -- raw[v.name] = v.minable["mining_time"]
             
-            recipes_group["raw-" .. k] = "basic-solid"
-        end
-    end
-    for k, v in pairs(game.entity_prototypes) do --raw dummpy fluid resources
+    --         recipes_group["raw-" .. k] = "basic-solid"
+    --     end
+    -- end
+    for k, v in pairs(game.entity_prototypes) do --raw dummpy  resources
         if (v.type == "resource") then
-            game.print(k)
-            game.print(v.minable["mining_time"])
-            raw[k] = v.minable["mining_time"]
+            local r = {}
+            r["time"] = v.mineable_properties["mining_time"]
+            if (v.group.name == "intermediate-products") then
+                r["type"] = "fluid"
+            else
+                r["type"]  = "solid"
+            end
+            raw[k] = r
             recipes_group["raw-" .. k] = v.resource_category
         end
-        -- if (v.subgroup.name == "raw-resource") then
-        --     -- game.print(v.resource_category)
-        --     recipes_group["raw-" .. k] = v.resource_category
-        -- end
+
     end
+
     recipes_group["raw-water"] = "basic-water" --raw dummpy water
     game.write_file("data-dump/raw.json", game.table_to_json(raw))
     game.print("raw.json written")
@@ -94,6 +98,8 @@ local function Dump(event)
     game.print("machines.json written")
     game.print("belts.json written")
     return recipes, machines, belts
+
+
 end
 
 local function MatchMachineGroup(machines)
